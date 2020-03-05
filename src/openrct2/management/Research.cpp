@@ -819,7 +819,7 @@ void research_fix()
     // For good measure, also include scenery groups.
     if (gResearchProgressStage == RESEARCH_STAGE_FINISHED_ALL)
     {
-        for (uint8_t i = 0; i < MAX_RIDE_OBJECTS; i++)
+        for (uint16_t i = 0; i < MAX_RIDE_OBJECTS; i++)
         {
             const rct_ride_entry* rideEntry = get_ride_entry(i);
 

@@ -252,9 +252,9 @@ void reset_type_to_ride_entry_index_map(IObjectManager& objectManager)
 {
     size_t stride = MAX_RIDE_OBJECTS + 1;
     uint8_t* entryTypeTable = (uint8_t*)malloc(RIDE_TYPE_COUNT * stride);
-    std::fill_n(entryTypeTable, RIDE_TYPE_COUNT * stride, 0xFF);
+    std::fill_n(entryTypeTable, RIDE_TYPE_COUNT * stride, RIDE_ENTRY_INDEX_NULL);
 
-    for (uint8_t i = 0; i < MAX_RIDE_OBJECTS; i++)
+    for (uint16_t i = 0; i < MAX_RIDE_OBJECTS; i++)
     {
         auto obj = objectManager.GetLoadedObject(OBJECT_TYPE_RIDE, i);
         if (obj != nullptr)
@@ -266,7 +266,7 @@ void reset_type_to_ride_entry_index_map(IObjectManager& objectManager)
                 if (rideType < RIDE_TYPE_COUNT)
                 {
                     uint8_t* entryArray = &entryTypeTable[rideType * stride];
-                    uint8_t* nextEntry = (uint8_t*)memchr(entryArray, 0xFF, stride);
+                    uint8_t* nextEntry = (uint8_t*)memchr(entryArray, RIDE_ENTRY_INDEX_NULL, stride);
                     *nextEntry = i;
                 }
             }
@@ -278,11 +278,11 @@ void reset_type_to_ride_entry_index_map(IObjectManager& objectManager)
     {
         uint8_t* entryArray = &entryTypeTable[i * stride];
         uint8_t* entry = entryArray;
-        while (*entry != 0xFF)
+        while (*entry != RIDE_ENTRY_INDEX_NULL)
         {
             *dst++ = *entry++;
         }
-        *dst++ = 0xFF;
+        *dst++ = RIDE_ENTRY_INDEX_NULL;
     }
 
     free(entryTypeTable);
