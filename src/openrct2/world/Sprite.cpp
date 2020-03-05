@@ -31,9 +31,9 @@ static rct_sprite _spriteList[MAX_SPRITES];
 
 static bool _spriteFlashingList[MAX_SPRITES];
 
-#define SPATIAL_INDEX_LOCATION_NULL 0x10000
+#define SPATIAL_INDEX_LOCATION_NULL MAX_SPRITES
 
-uint16_t gSpriteSpatialIndex[0x10001];
+uint16_t gSpriteSpatialIndex[MAX_SPRITES + 1];
 
 const rct_string_id litterNames[12] = { STR_LITTER_VOMIT,
                                         STR_LITTER_VOMIT,
