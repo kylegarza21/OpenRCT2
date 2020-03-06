@@ -658,8 +658,8 @@ bool track_add_station_element(int32_t x, int32_t y, int32_t z, int32_t directio
         }
         if (flags & GAME_COMMAND_FLAG_APPLY)
         {
-            int8_t stationIndex = ride_get_first_empty_station_start(ride);
-            assert(stationIndex != -1);
+            StationIndex stationIndex = ride_get_first_empty_station_start(ride);
+            assert(stationIndex != STATION_INDEX_NULL);
 
             ride->stations[stationIndex].Start.x = x;
             ride->stations[stationIndex].Start.y = y;
@@ -751,8 +751,8 @@ bool track_add_station_element(int32_t x, int32_t y, int32_t z, int32_t directio
                 int32_t targetTrackType;
                 if (x == stationX1 && y == stationY1)
                 {
-                    int8_t stationIndex = ride_get_first_empty_station_start(ride);
-                    assert(stationIndex != -1);
+                    StationIndex stationIndex = ride_get_first_empty_station_start(ride);
+                    assert(stationIndex != STATION_INDEX_NULL);
 
                     ride->stations[stationIndex].Start.x = x;
                     ride->stations[stationIndex].Start.y = y;
@@ -898,8 +898,8 @@ bool track_remove_station_element(int32_t x, int32_t y, int32_t z, int32_t direc
                 if (x == stationX1 && y == stationY1)
                 {
                 loc_6C4BF5:;
-                    int8_t stationIndex = ride_get_first_empty_station_start(ride);
-                    assert(stationIndex != -1);
+                    auto stationIndex = ride_get_first_empty_station_start(ride);
+                    assert(stationIndex != STATION_INDEX_NULL);
 
                     ride->stations[stationIndex].Start.x = x;
                     ride->stations[stationIndex].Start.y = y;

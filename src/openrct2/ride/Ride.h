@@ -38,7 +38,7 @@ struct Staff;
 #define DOWNTIME_HISTORY_SIZE 8
 #define CUSTOMER_HISTORY_SIZE 10
 #define MAX_CARS_PER_TRAIN 255
-#define MAX_STATIONS 8 // Increase to 255 once the tile elements can handle it
+#define MAX_STATIONS 255
 #define MAX_RIDES 255
 #define RIDE_TYPE_NULL 255
 #define RIDE_ADJACENCY_CHECK_DISTANCE 5
@@ -190,7 +190,7 @@ struct RideMeasurement
     uint16_t num_items{};
     uint16_t current_item{};
     uint8_t vehicle_index{};
-    uint8_t current_station{};
+    StationIndex current_station{};
     int8_t vertical[MAX_ITEMS]{};
     int8_t lateral[MAX_ITEMS]{};
     uint8_t velocity[MAX_ITEMS]{};
@@ -370,7 +370,7 @@ struct Ride
     uint16_t guests_favourite;
     uint32_t lifecycle_flags;
     uint16_t total_air_time;
-    uint8_t current_test_station;
+    StationIndex current_test_station;
     uint8_t num_circuits;
     CoordsXYZ CableLiftLoc;
     uint16_t cable_lift;
@@ -1172,7 +1172,7 @@ int32_t ride_music_params_update(
     const CoordsXYZ& rideCoords, Ride* ride, uint16_t sampleRate, uint32_t position, uint8_t* tuneId);
 void ride_music_update_final();
 void ride_prepare_breakdown(Ride* ride, int32_t breakdownReason);
-TileElement* ride_get_station_start_track_element(Ride* ride, int32_t stationIndex);
+TileElement* ride_get_station_start_track_element(Ride* ride, StationIndex stationIndex);
 TileElement* ride_get_station_exit_element(const CoordsXYZ& elementPos);
 void ride_set_status(Ride* ride, int32_t status);
 void ride_set_name(Ride* ride, const char* name, uint32_t flags);

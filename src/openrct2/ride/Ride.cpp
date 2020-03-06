@@ -1085,14 +1085,14 @@ void ride_clear_for_construction(Ride* ride)
 void ride_remove_peeps(Ride* ride)
 {
     // Find first station
-    int8_t stationIndex = ride_get_first_valid_station_start(ride);
+    auto stationIndex = ride_get_first_valid_station_start(ride);
 
     // Get exit position and direction
     int32_t exitX = 0;
     int32_t exitY = 0;
     int32_t exitZ = 0;
     int32_t exitDirection = INVALID_DIRECTION;
-    if (stationIndex != -1)
+    if (stationIndex != STATION_INDEX_NULL)
     {
         TileCoordsXYZD location = ride_get_exit_location(ride, stationIndex);
         if (!location.isNull())
@@ -2292,8 +2292,8 @@ static void ride_inspection_update(Ride* ride)
     ride->lifecycle_flags |= RIDE_LIFECYCLE_DUE_INSPECTION;
     ride->mechanic_status = RIDE_MECHANIC_STATUS_CALLING;
 
-    int8_t stationIndex = ride_get_first_valid_station_exit(ride);
-    ride->inspection_station = (stationIndex != -1) ? stationIndex : 0;
+    auto stationIndex = ride_get_first_valid_station_exit(ride);
+    ride->inspection_station = (stationIndex != STATION_INDEX_NULL) ? stationIndex : 0;
 }
 
 static int32_t get_age_penalty(Ride* ride)
@@ -2498,7 +2498,7 @@ void ride_prepare_breakdown(Ride* ride, int32_t breakdownReason)
         case BREAKDOWN_CONTROL_FAILURE:
             // Inspect first station with an exit
             i = ride_get_first_valid_station_exit(ride);
-            if (i != -1)
+            if (i != STATION_INDEX_NULL)
             {
                 ride->inspection_station = i;
             }
@@ -2553,7 +2553,7 @@ void ride_prepare_breakdown(Ride* ride, int32_t breakdownReason)
             // Original code generates a random number but does not use it
             // Unsure if this was supposed to choose a random station (or random station with an exit)
             i = ride_get_first_valid_station_exit(ride);
-            if (i != -1)
+            if (i != STATION_INDEX_NULL)
             {
                 ride->inspection_station = i;
             }
@@ -3840,17 +3840,17 @@ static int32_t ride_mode_check_station_present(Ride* ride)
 {
     int32_t stationIndex = ride_get_first_valid_station_start(ride);
 
-    if (stationIndex == -1)
+    if (stationIndex == STATION_INDEX_NULL)
     {
         gGameCommandErrorText = STR_NOT_YET_CONSTRUCTED;
         if (ride_type_has_flag(ride->type, RIDE_TYPE_FLAG_HAS_NO_TRACK))
-            return -1;
+            return STATION_INDEX_NULL;
 
         if (ride->type == RIDE_TYPE_MAZE)
-            return -1;
+            return STATION_INDEX_NULL;
 
         gGameCommandErrorText = STR_REQUIRES_A_STATION_PLATFORM;
-        return -1;
+        return STATION_INDEX_NULL;
     }
 
     return stationIndex;
@@ -5162,7 +5162,6 @@ static TileElement* loc_6B4F6B(ride_id_t rideIndex, int32_t x, int32_t y)
 
 int32_t ride_is_valid_for_test(Ride* ride, int32_t status, bool isApplying)
 {
-    int32_t stationIndex;
     CoordsXYE trackElement, problematicTrackElement = {};
 
     if (ride->type == RIDE_TYPE_NULL)
@@ -5176,8 +5175,8 @@ int32_t ride_is_valid_for_test(Ride* ride, int32_t status, bool isApplying)
         window_close_by_number(WC_RIDE_CONSTRUCTION, ride->id);
     }
 
-    stationIndex = ride_mode_check_station_present(ride);
-    if (stationIndex == -1)
+    auto stationIndex = ride_mode_check_station_present(ride);
+    if (stationIndex == STATION_INDEX_NULL)
         return 0;
 
     if (!ride_mode_check_valid_station_numbers(ride))
@@ -5302,7 +5301,6 @@ int32_t ride_is_valid_for_test(Ride* ride, int32_t status, bool isApplying)
  */
 int32_t ride_is_valid_for_open(Ride* ride, int32_t goingToBeOpen, bool isApplying)
 {
-    int32_t stationIndex;
     CoordsXYE trackElement, problematicTrackElement = {};
 
     // Check to see if construction tool is in use. If it is close the construction window
@@ -5313,8 +5311,8 @@ int32_t ride_is_valid_for_open(Ride* ride, int32_t goingToBeOpen, bool isApplyin
         && (input_test_flag(INPUT_FLAG_TOOL_ACTIVE)))
         window_close_by_number(WC_RIDE_CONSTRUCTION, ride->id);
 
-    stationIndex = ride_mode_check_station_present(ride);
-    if (stationIndex == -1)
+    auto stationIndex = ride_mode_check_station_present(ride);
+    if (stationIndex == STATION_INDEX_NULL)
         return 0;
 
     if (!ride_mode_check_valid_station_numbers(ride))
